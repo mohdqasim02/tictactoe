@@ -9,6 +9,8 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class GameTest {
@@ -68,5 +70,15 @@ class GameTest {
         game.makeMove(7)
 
         assertThrows<GameOverException> { game.makeMove(4) }
+    }
+
+    @Test
+    fun `should return gameStatus with moves made, current player, isGameOver and winner`() {
+        val gameStatus = game.gameStatus()
+
+        assertNull(gameStatus.winner)
+        assertFalse { gameStatus.isGameOver }
+        assertEquals(p1, gameStatus.currentPlayer)
+        assertEquals(mapOf(), gameStatus.moves)
     }
 }
