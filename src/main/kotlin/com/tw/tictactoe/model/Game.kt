@@ -1,6 +1,7 @@
 package com.tw.tictactoe.model
 
 import com.tw.tictactoe.exception.GameOverException
+import com.tw.tictactoe.exception.LobbyFullException
 import com.tw.tictactoe.exception.OutOfRangeException
 import com.tw.tictactoe.exception.PreOccupiedException
 
