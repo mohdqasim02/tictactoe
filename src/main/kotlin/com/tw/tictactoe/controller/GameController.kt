@@ -1,36 +1,53 @@
 package com.tw.tictactoe.controller
 
-import com.tw.tictactoe.controller.dto.Move
-import com.tw.tictactoe.controller.dto.PlayerNames
-import com.tw.tictactoe.model.*
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import com.tw.tictactoe.model.Game
+import com.tw.tictactoe.model.GameStatus
+import com.tw.tictactoe.model.Lobby
+import com.tw.tictactoe.model.LobbyStatus.WAITING
+import org.springframework.stereotype.Service
+import java.util.*
 
-@RestController
-@RequestMapping("/game")
+@Service
 class GameController {
-    lateinit var game: Game
+    private val games = mutableMapOf<UUID, Game>()
+    private val lobbies = mutableMapOf<UUID, Lobby>()
 
-    @PostMapping(value = ["/start"], produces = ["application/json"])
-    fun startGame(@RequestBody playerNames: PlayerNames){
-        val player1 = Player(playerNames.firstPlayer, Symbol.X)
-        val player2 = Player(playerNames.secondPlayer, Symbol.O)
-        val players = Players(player1, player2)
+    private lateinit var lobby: Lobby
+    private lateinit var lobbyId: UUID
 
-        game = Game(players)
+    init {
+        createLobby()
     }
 
-    @PostMapping(value = ["/move"], produces = ["application/json"])
-    fun makeMove(@RequestBody position: Move) {
-        game.makeMove(position.position)
+    private fun createLobby() {
+        lobby = Lobby()
+        lobbyId = UUID.randomUUID()
+        lobbies[lobbyId] = lobby
     }
 
+    fun addPlayer(playerName: String): UUID {
+        if(lobby.status() != WAITING) {
+            createLobby()
+        }
 
-    @GetMapping(value = ["/status"])
-    fun getGameStatus(): GameStatus {
-        return game.gameStatus()
+        lobby.addPlayer(playerName)
+        return lobbyId
+    }
+
+    fun getLobbyStatus(lobbyId: UUID) = lobbies[lobbyId]?.status()
+
+    fun startGame(lobbyId: UUID) {
+        val lobby = lobbies[lobbyId]
+        val game = lobby?.startGame()
+
+        games[lobbyId] = game!!
+    }
+
+    fun makeMove(gameId: UUID, position: Int) {
+        games[gameId]?.makeMove(position)
+    }
+
+    fun getGameStatus(gameId: UUID): GameStatus {
+        return games[gameId]!!.gameStatus()
     }
 }
