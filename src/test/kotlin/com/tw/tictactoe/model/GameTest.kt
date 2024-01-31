@@ -73,12 +73,14 @@ class GameTest {
     }
 
     @Test
-    fun `should return gameStatus with moves made, current player, isGameOver and winner`() {
+    fun `should return gameStatus with players, movesMade, currentPlayer, nextPlayer, isGameOver and winner`() {
         val gameStatus = game.gameStatus()
 
+        assertEquals(listOf(p1, p2), gameStatus.players)
+        assertEquals(mapOf(), gameStatus.moves)
+        assertEquals(p1, gameStatus.currentPlayer)
+        assertEquals(p2, gameStatus.nextPlayer)
         assertNull(gameStatus.winner)
         assertFalse { gameStatus.isGameOver }
-        assertEquals(p1, gameStatus.currentPlayer)
-        assertEquals(mapOf(), gameStatus.moves)
     }
 }

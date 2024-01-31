@@ -1,13 +1,14 @@
 package com.tw.tictactoe.model
 
 import com.tw.tictactoe.exception.GameOverException
-import com.tw.tictactoe.exception.LobbyFullException
 import com.tw.tictactoe.exception.OutOfRangeException
 import com.tw.tictactoe.exception.PreOccupiedException
 
 data class GameStatus(
+    val players: List<Player>,
     val moves: Map<Int, Symbol>,
     val currentPlayer: Player,
+    val nextPlayer: Player,
     val isGameOver: Boolean,
     val winner: String?
 )
@@ -41,5 +42,12 @@ class Game(private val players: Players) {
         players.changeTurn()
     }
 
-    fun gameStatus() = GameStatus(players.movesMade(), players.currentPlayer, isGameOver, winner)
+    fun gameStatus() = GameStatus(
+        players = players.playerList,
+        moves = players.movesMade(),
+        currentPlayer = players.currentPlayer,
+        nextPlayer = players.nextPlayer,
+        isGameOver = isGameOver,
+        winner = winner
+    )
 }

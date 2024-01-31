@@ -8,6 +8,7 @@ import com.tw.tictactoe.model.GameStatus
 import com.tw.tictactoe.model.LobbyStatus.WAITING
 import com.tw.tictactoe.model.Player
 import com.tw.tictactoe.model.Symbol.O
+import com.tw.tictactoe.model.Symbol.X
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -106,7 +107,7 @@ class GameApiControllerTest {
 
     @Test
     fun `should return game status based on gameId present in the cookie`() {
-        val gameStatus = GameStatus(mapOf(), Player("Mohd", O), false, null)
+        val gameStatus = GameStatus(listOf(), mapOf(), Player("Mohd", O), Player("Qasim", X), false, null)
         val cookie = Cookie("gameId", lobbyId.toString())
 
         every { gameController.getGameStatus( any()) } returns gameStatus
