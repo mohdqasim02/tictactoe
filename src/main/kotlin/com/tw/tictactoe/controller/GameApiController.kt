@@ -33,7 +33,7 @@ class GameApiController(val gameController: GameController) {
         return ResponseEntity
             .ok()
             .header(HttpHeaders.COOKIE, "lobbyId=null;maxAge=0")
-            .header(HttpHeaders.SET_COOKIE, "gameId=$lobbyId")
+            .header(HttpHeaders.SET_COOKIE, "gameId=$lobbyId;path=/game")
             .body(null)
     }
 

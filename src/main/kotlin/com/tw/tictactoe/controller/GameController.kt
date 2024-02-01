@@ -37,6 +37,8 @@ class GameController {
     fun getLobbyStatus(lobbyId: UUID) = lobbies[lobbyId]?.status()
 
     fun startGame(lobbyId: UUID) {
+        if(games.containsKey(lobbyId)) return
+
         val lobby = lobbies[lobbyId]
         val game = lobby?.startGame()
 
