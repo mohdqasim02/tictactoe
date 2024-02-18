@@ -20,31 +20,31 @@ class LobbyTest{
 
     @Test
     fun `should add player when lobby is waiting`() {
-        assertDoesNotThrow { lobby.addPlayer("Mohd") }
-        assertDoesNotThrow { lobby.addPlayer("Qasim") }
+        assertDoesNotThrow { lobby.addPlayer(Player("Mohd", Symbol.O)) }
+        assertDoesNotThrow { lobby.addPlayer(Player("Qasim", Symbol.X)) }
     }
 
     @Test
     fun `should throw LobbyFullException when two players are already added`() {
-        lobby.addPlayer("Mohd")
-        lobby.addPlayer("Qasim")
+        lobby.addPlayer(Player("Mohd", Symbol.O))
+        lobby.addPlayer(Player("Qasim", Symbol.X))
 
-        assertThrows<LobbyFullException> { lobby.addPlayer("Honu") }
+        assertThrows<LobbyFullException> { lobby.addPlayer(Player("Honu", Symbol.O)) }
     }
 
     @Test
     fun `should throw LobbyExpiredException when the game has already started`() {
-        lobby.addPlayer("Mohd")
-        lobby.addPlayer("Qasim")
+        lobby.addPlayer(Player("Mohd", Symbol.O))
+        lobby.addPlayer(Player("Qasim", Symbol.X))
         lobby.startGame()
 
-        assertThrows<LobbyExpiredException> { lobby.addPlayer("Honu") }
+        assertThrows<LobbyExpiredException> { lobby.addPlayer(Player("Honu", Symbol.X)) }
     }
 
     @Test
     fun `should start game if 2 players are present and mark the lobby as Expired`() {
-        lobby.addPlayer("Mohd")
-        lobby.addPlayer("Qasim")
+        lobby.addPlayer(Player("Mohd", Symbol.O))
+        lobby.addPlayer(Player("Qasim", Symbol.X))
         lobby.startGame()
 
         assertEquals(EXPIRED, lobby.status())

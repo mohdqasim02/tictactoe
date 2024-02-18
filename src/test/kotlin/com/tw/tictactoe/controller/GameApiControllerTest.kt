@@ -41,7 +41,7 @@ class GameApiControllerTest {
     fun `should return lobbyId when a player registers to the game`() {
         val player = PlayerName("Mohd")
 
-        every { gameController.addPlayer(any()) } returns lobbyId
+        every { gameController.addPlayer(any()) } returns Pair(lobbyId, O)
 
         mockMvc.perform(
             MockMvcRequestBuilders
@@ -73,14 +73,13 @@ class GameApiControllerTest {
 
     @Test
     fun `should start game based on lobbyId present in the cookie`() {
-        val cookie = Cookie("lobbyId", lobbyId.toString())
-
         every { gameController.startGame(any()) } just(Runs)
 
         mockMvc.perform(
             MockMvcRequestBuilders
                 .post("/lobby/start")
-                .cookie(cookie)
+                .cookie(Cookie("lobbyId", lobbyId.toString()))
+                .cookie(Cookie("symbol", O.name))
         ).andExpectAll(
             MockMvcResultMatchers.status().is2xxSuccessful(),
             MockMvcResultMatchers.cookie().value("gameId", lobbyId.toString()),
@@ -90,14 +89,13 @@ class GameApiControllerTest {
 
     @Test
     fun `should make move for the current player based on gameId present in the cookie`() {
-        val cookie = Cookie("gameId", lobbyId.toString())
-
-        every { gameController.makeMove(lobbyId, any()) } just(Runs)
+        every { gameController.makeMove(lobbyId, any(), O) } just(Runs)
 
         mockMvc.perform(
             MockMvcRequestBuilders
                 .post("/game/move")
-                .cookie(cookie)
+                .cookie(Cookie("gameId", lobbyId.toString()))
+                .cookie(Cookie("symbol", O.name))
                 .header("content-type", "application/json")
                 .content(objectMapper.writeValueAsString(Move(6)))
         ).andExpectAll(

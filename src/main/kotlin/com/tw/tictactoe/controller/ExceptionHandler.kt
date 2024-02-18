@@ -24,4 +24,11 @@ class ExceptionHandler : ResponseEntityExceptionHandler() {
         println(exception.message)
         return ErrorResponse(message = exception.message, position = exception.position)
     }
+
+    @ExceptionHandler(IllegalArgumentException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun illegalMoveErrorHandler(exception: IllegalArgumentException): ErrorResponse {
+        println(exception.message)
+        return ErrorResponse(message = exception.message)
+    }
 }

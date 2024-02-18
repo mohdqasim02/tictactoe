@@ -29,7 +29,7 @@ class GameTest {
 
     @Test
     fun `should record move for current player and change the turn`() {
-        game.makeMove(5)
+        game.makeMove(5, symbol)
 
         assertTrue { p1.movesMade().containsKey(5) }
         assertEquals(p2, players.currentPlayer)
@@ -37,39 +37,39 @@ class GameTest {
 
     @Test
     fun `should throw out of range exception when the position is not between 1 to 9`() {
-        assertThrows<OutOfRangeException> { game.makeMove(10) }
+        assertThrows<OutOfRangeException> { game.makeMove(10, symbol) }
     }
 
     @Test
     fun `should throw pre occupied exception when the position is already occupied`() {
-        game.makeMove(4)
-        assertThrows<PreOccupiedException> { game.makeMove(4) }
+        game.makeMove(4, symbol)
+        assertThrows<PreOccupiedException> { game.makeMove(4, symbol) }
     }
 
     @Test
     fun `should throw game over exception when a player has won the game`() {
-        game.makeMove(5)
-        game.makeMove(2)
-        game.makeMove(1)
-        game.makeMove(3)
-        game.makeMove(9)
+        game.makeMove(5, symbol)
+        game.makeMove(2, symbol)
+        game.makeMove(1, symbol)
+        game.makeMove(3, symbol)
+        game.makeMove(9, symbol)
 
-        assertThrows<GameOverException> { game.makeMove(4) }
+        assertThrows<GameOverException> { game.makeMove(4, symbol) }
     }
 
     @Test
     fun `should throw game over exception when all moves are already made`() {
-        game.makeMove(1)
-        game.makeMove(5)
-        game.makeMove(8)
-        game.makeMove(4)
-        game.makeMove(6)
-        game.makeMove(9)
-        game.makeMove(2)
-        game.makeMove(3)
-        game.makeMove(7)
+        game.makeMove(1, symbol)
+        game.makeMove(5, symbol)
+        game.makeMove(8, symbol)
+        game.makeMove(4, symbol)
+        game.makeMove(6, symbol)
+        game.makeMove(9, symbol)
+        game.makeMove(2, symbol)
+        game.makeMove(3, symbol)
+        game.makeMove(7, symbol)
 
-        assertThrows<GameOverException> { game.makeMove(4) }
+        assertThrows<GameOverException> { game.makeMove(4, symbol) }
     }
 
     @Test

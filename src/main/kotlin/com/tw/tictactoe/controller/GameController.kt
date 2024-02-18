@@ -1,9 +1,9 @@
 package com.tw.tictactoe.controller
 
-import com.tw.tictactoe.model.Game
-import com.tw.tictactoe.model.GameStatus
-import com.tw.tictactoe.model.Lobby
+import com.tw.tictactoe.model.*
 import com.tw.tictactoe.model.LobbyStatus.WAITING
+import com.tw.tictactoe.model.Symbol.O
+import com.tw.tictactoe.model.Symbol.X
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -25,13 +25,15 @@ class GameController {
         lobbies[lobbyId] = lobby
     }
 
-    fun addPlayer(playerName: String): UUID {
+    fun addPlayer(playerName: String): Pair<UUID, Symbol> {
         if(lobby.status() != WAITING) {
             createLobby()
         }
 
-        lobby.addPlayer(playerName)
-        return lobbyId
+        val symbol = if(lobby.players.size == 0) X else O
+        lobby.addPlayer(Player(playerName, symbol))
+
+        return Pair(lobbyId, symbol)
     }
 
     fun getLobbyStatus(lobbyId: UUID) = lobbies[lobbyId]?.status()
@@ -45,8 +47,8 @@ class GameController {
         games[lobbyId] = game!!
     }
 
-    fun makeMove(gameId: UUID, position: Int) {
-        games[gameId]?.makeMove(position)
+    fun makeMove(gameId: UUID, position: Int, symbol: Symbol) {
+        games[gameId]?.makeMove(position, symbol)
     }
 
     fun getGameStatus(gameId: UUID): GameStatus {

@@ -11,13 +11,13 @@ enum class LobbyStatus {
 
 class Lobby {
     private var status = WAITING
-    private val players = ArrayList<String>(2)
+    val players = ArrayList<Player>(2)
 
-    fun addPlayer(playerName: String) {
+    fun addPlayer(player: Player) {
         if(status == READY) throw LobbyFullException()
         if(status == EXPIRED) throw LobbyExpiredException()
 
-        players.add(playerName)
+        players.add(player)
 
         if (players.size == 2) status = READY
     }
@@ -29,8 +29,8 @@ class Lobby {
     fun startGame(): Game {
         if(players.size != 2) throw LobbyWaitingException()
 
-        val p1 = Player(players[0], Symbol.X)
-        val p2 = Player(players[1], Symbol.O)
+        val p1 = players[0]
+        val p2 = players[1]
 
         return Game(Players(p1, p2)).also { status = EXPIRED }
     }

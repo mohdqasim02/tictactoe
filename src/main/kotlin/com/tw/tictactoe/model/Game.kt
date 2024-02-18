@@ -21,10 +21,11 @@ class Game(private val players: Players) {
     private fun hasAllMovesMade(): Boolean = players.movesMade().size == 9
     private fun isPositionOccupied(position: Int): Boolean = players.movesMade().containsKey(position)
 
-    fun makeMove(position: Int) {
+    fun makeMove(position: Int, symbol: Symbol) {
         if(isGameOver) throw GameOverException()
         if(!isInRange(position)) throw OutOfRangeException(position)
         if(isPositionOccupied(position)) throw PreOccupiedException(position)
+        if(players.currentPlayer.symbol != symbol) throw IllegalArgumentException("It's not your turn")
 
         players.recordMove(position)
 
