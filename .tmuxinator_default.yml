@@ -1,0 +1,21 @@
+name: tic-tac-toe
+root: .
+
+tmux_options: -f tooling/tmux.conf
+
+windows:
+  - main:
+      layout: tiled
+      panes:
+        - frontend:
+            - printf '\033]2;%s\033\\' 'frontend'
+            - cd frontend && npm install && npm start
+        - backend build:
+            - printf '\033]2;%s\033\\' 'backend build'
+            - ./gradlew build -x test --continuous
+        - backend:
+            - printf '\033]2;%s\033\\' 'backend run'
+            - ./gradlew bootRun
+        - tmux:
+            - printf '\033]2;%s\033\\' 'tmux'
+            - bash tooling/commander.sh
